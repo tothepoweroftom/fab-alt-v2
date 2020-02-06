@@ -8,56 +8,64 @@ const style = {
   fontWeight: 800,
   width: "90vw",
   color: "#000",
+  // height: "100%",
   zIndex: "123123"
 };
 
 const pageStyle = {
-  borderRadius: 20,
+  borderRadius: 20
 
-  height: "98%"
+  // height: "98%"
 };
 const blue = Color("#00000005");
 const darkBlue = Color("#00000020");
 const shadowCard = "0px 6px 6px 0px rgba(0, 0, 0, 0.25)";
-export function CardDeck() {
-  return (
-    <Page
-      width={"100%"}
-      height={"100%"}
-      overflow={"visible"}
-      style={pageStyle}
-      initial={{ opacity: 0, scale: 0.1 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.1 }}
-      transition={{ duration: 0.5 }}
-      // gap={-50}
-      effect={info => {
-        const offset = info.normalizedOffset;
+export class CardDeck extends React.Component {
+  constructor(props) {
+    super(props);
+    this.color = this.props.color ? Color(this.props.color) : blue;
+    this.dark = this.props.color ? Color.darken(this.color, 100) : darkBlue;
+  }
+  render() {
+    return (
+      <Page
+        width={"100%"}
+        height={"100%"}
+        overflow={"visible"}
+        style={pageStyle}
+        initial={{ opacity: 0, scale: 0.1 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.1 }}
+        transition={{ duration: 0.5 }}
+        // gap={-50}
+        effect={info => {
+          const offset = info.normalizedOffset;
 
-        const background = transform(
-          offset,
-          [-1, 0, 1],
-          [darkBlue, blue, darkBlue]
-        );
-        const scaleY = transform(offset, [-1, 0, 1], [0.85, 1, 0.85]);
-        const borderRadius = transform(offset, [-1, 0, 1], [20, 20, 20]);
-        const boxShadow = transform(
-          offset,
-          [-1, 0, 1],
-          [shadowCard, shadowCard, shadowCard]
-        );
+          const background = transform(
+            offset,
+            [-1, 0, 1],
+            [this.dark, this.color, this.dark]
+          );
+          const scaleY = transform(offset, [-1, 0, 1], [0.85, 1, 0.85]);
+          const borderRadius = transform(offset, [-1, 0, 1], [20, 20, 20]);
+          const boxShadow = transform(
+            offset,
+            [-1, 0, 1],
+            [shadowCard, shadowCard, shadowCard]
+          );
 
-        return {
-          background,
-          borderRadius,
-          scaleY,
-          boxShadow
-        };
-      }}
-    >
-      {pages.map((title, index) => {
-        return <Card title={title} />;
-      })}
-    </Page>
-  );
+          return {
+            background,
+            borderRadius,
+            scaleY,
+            boxShadow
+          };
+        }}
+      >
+        {pages.map((title, index) => {
+          return <Card title={title} />;
+        })}
+      </Page>
+    );
+  }
 }

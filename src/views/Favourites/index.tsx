@@ -10,7 +10,7 @@ import {
   content
 } from "../../styles/AppLayout";
 
-export class Inventions extends React.Component {
+export class Favourites extends React.Component {
   constructor(props) {
     super(props);
     this.stage = this.props.toolpage;
@@ -21,7 +21,7 @@ export class Inventions extends React.Component {
   render() {
     return (
       // <Frame style={content}>
-      <CardDeck />
+      <CardDeck color={"#fff"} />
       // </Frame>
     );
   }

@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import { Frame, Stack, Page, Color, useAnimation, useCycle } from "framer";
 import { BottomNavigationBar } from "../src/components/BottomNavigation";
 import { WhatIf } from "./views/WhatIf/index.tsx";
+import { Favourites } from "./views/Favourites/index.tsx";
 
 import { Inventions } from "./views/Inventions/index.tsx";
 import { Home } from "./views/Home/index.tsx";
@@ -23,15 +24,15 @@ export function App() {
 
   const variants = {
     home: {
-      backgroundColor: "#D50101",
-      transition: { duration: 1.5 }
+      backgroundColor: "#2962FF",
+      transition: { duration: 1.0 }
     },
     first: {
-      backgroundColor: "#DEDE78",
-      transition: { duration: 1.5 }
+      backgroundColor: "#FAF455",
+      transition: { duration: 1.0 }
     },
-    second: { backgroundColor: "#E50000", transition: { duration: 1.5 } },
-    third: { backgroundColor: "#2962FF", transition: { duration: 1.5 } }
+    second: { backgroundColor: "#E50000", transition: { duration: 1.0 } },
+    third: { backgroundColor: "#2962FF", transition: { duration: 1.0 } }
   };
   const controls = useAnimation();
   const handleChange = (event, newValue) => {
@@ -49,29 +50,37 @@ export function App() {
     }
   };
   return (
-    <Stack
-      {...appLayout}
-      initial="first"
-      animate={controls}
-      variants={variants}
-    >
-      <Frame {...topbar} />
-      <Switch>
-        <Route path="/whatif">
-          <WhatIf />
-        </Route>
-        <Route path="/inventions">
-          <Inventions />
-        </Route>
-        <Route path="/favourite" />
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-      <Frame {...toolbar}>
-        <BottomNavigationBar handleChange={handleChange} value={0} />
-      </Frame>
-    </Stack>
+    <>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <Stack
+        {...appLayout}
+        initial="first"
+        animate={controls}
+        variants={variants}
+      >
+        <Frame {...topbar} />
+        <Frame {...content}>
+          <Switch>
+            <Route path="/whatif">
+              <WhatIf />
+            </Route>
+            <Route path="/inventions">
+              <Inventions />
+            </Route>
+            <Route path="/favourites">
+              <Favourites />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </Frame>
+        <Frame {...toolbar}>
+          <BottomNavigationBar handleChange={handleChange} value={0} />
+        </Frame>
+      </Stack>
+    </>
   );
 }
 

@@ -14,7 +14,7 @@ import * as RiTa from "rita";
 
 const cardFrame = {
   width: "100%",
-  height: "100%",
+  height: "inherit",
   overflow: "hidden",
   borderRadius: 20,
   backgroundColor: "transparent"

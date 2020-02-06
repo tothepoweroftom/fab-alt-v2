@@ -11,6 +11,23 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import RestoreIcon from "@material-ui/icons/Restore";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { createMuiTheme } from "@material-ui/core";
+
+const theme = createMuiTheme({
+  props: {
+    // Name of the component ⚛️
+    MuiButtonBase: {
+      // The properties to apply
+      disableRipple: true, // No more ripple, on the whole application 💣!,
+      padding: "0px"
+    }
+  },
+  transitions: {
+    // So we have `transition: none;` everywhere
+    create: () => "none"
+  }
+});
 
 interface Props {
   showLabels?: boolean;
@@ -36,7 +53,8 @@ const useStyles = makeStyles({
     border: 0,
     width: "33%",
     height: "100%",
-    padding: "0px !important"
+    padding: "0px 0px 10px 0px !important"
+    // margin: "5px"
   }
 });
 
@@ -64,27 +82,32 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
     props.handleChange(event, newValue);
   };
   return (
-    <MuiBottomNavigation
-      value={value}
-      onChange={handleChange}
-      classes={{
-        root: classes.root, // class name, e.g. `classes-nesting-root-x`
-        label: classes.label // class name, e.g. `classes-nesting-label-x`
-      }}
-      {...other}
-    >
-      {items.map(
-        (item, index) =>
-          (labels[index] !== undefined || icons[index] !== undefined) && (
-            <BottomNavigationAction
-              value={labels[index]}
-              icon={<RestoreIcon />}
-            >
-              <Link to={routes[index]}>{/* <h1>lalal</h1> */}a</Link>
-            </BottomNavigationAction>
-          )
-      )}
-    </MuiBottomNavigation>
+    <ThemeProvider theme={theme}>
+      <MuiBottomNavigation
+        value={value}
+        onChange={handleChange}
+        classes={{
+          root: classes.root, // class name, e.g. `classes-nesting-root-x`
+          label: classes.label // class name, e.g. `classes-nesting-label-x`
+        }}
+        {...other}
+      >
+        {items.map(
+          (item, index) =>
+            (labels[index] !== undefined || icons[index] !== undefined) && (
+              <BottomNavigationAction
+                value={labels[index]}
+                icon={<Icon icon={index} />}
+                classes={{
+                  root: classes.iconRoot
+                }}
+              >
+                <Link to={routes[index]}>{/* <h1>lalal</h1> */}a</Link>
+              </BottomNavigationAction>
+            )
+        )}
+      </MuiBottomNavigation>
+    </ThemeProvider>
   );
 };
 

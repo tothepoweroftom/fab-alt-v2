@@ -20,9 +20,9 @@ export class WhatIf extends React.Component {
   componentWillMount() {}
   render() {
     return (
-      <Frame style={content}>
-        <CardDeck />
-      </Frame>
+      // <Frame style={content}>
+      <CardDeck />
+      // </Frame>
     );
   }
 }
