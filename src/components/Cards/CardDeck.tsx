@@ -18,8 +18,13 @@ const pageStyle = {
   // height: "98%"
 };
 const blue = Color("#00000005");
-const darkBlue = Color("#00000020");
-const shadowCard = "0px 6px 6px 0px rgba(0, 0, 0, 0.25)";
+const text = Color("#000000");
+const textNone = Color("#00000000");
+
+const darkBlue = Color("#00000050");
+const shadowCard = "0px 7px 7px 0px rgba(0, 0, 0, 0.25)";
+const noShadowCard = "0px 0px 0px 0px rgba(0, 0, 0, 0.25)";
+
 export class CardDeck extends React.Component {
   constructor(props) {
     super(props);
@@ -46,15 +51,22 @@ export class CardDeck extends React.Component {
             [-1, 0, 1],
             [this.dark, this.color, this.dark]
           );
+          const color = transform(
+            offset,
+            [-1, 0, 1],
+            [textNone, text, textNone]
+          );
+
           const scaleY = transform(offset, [-1, 0, 1], [0.85, 1, 0.85]);
           const borderRadius = transform(offset, [-1, 0, 1], [20, 20, 20]);
           const boxShadow = transform(
             offset,
             [-1, 0, 1],
-            [shadowCard, shadowCard, shadowCard]
+            [noShadowCard, shadowCard, noShadowCard]
           );
 
           return {
+            color,
             background,
             borderRadius,
             scaleY,
