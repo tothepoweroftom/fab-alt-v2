@@ -1,0 +1,33 @@
+.app-layout {
+  width: 100vw;
+  height: 100ch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+  background-color: rgba(36, 137, 219, 1);
+}
+.topbar {
+  width: 90%;
+  height: 7%;
+  overflow: visible;
+  background-color: rgba(0, 153, 255, 1);
+  border: 1px solid #222;
+}
+
+.content {
+  flex: 1;
+  height: 1px;
+  width: 90%;
+  overflow: hidden;
+  border: 1px solid #222;
+}
+
+.toolbar {
+  width: 90%;
+  height: 11%;
+  overflow: visible;
+  background-color: rgba(0, 153, 255, 1);
+  border: 1px solid #222;
+}
