@@ -11,6 +11,7 @@ import {
 import { tagCategories } from "../../utilities";
 import { HyperBlock } from "../HyperBlock/index";
 import * as RiTa from "rita";
+import { Icon } from "../Icons";
 
 const cardFrame = {
   width: "100%",
@@ -21,13 +22,13 @@ const cardFrame = {
 };
 
 const cardPageContainer = {
-  width: "86%",
-  height: "90%",
+  width: "100%",
+  height: "100%",
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
   alignItems: "center",
-  backgroundColor: "#ED0000",
+  // backgroundColor: "#ED0000",
 
   overflow: "hidden"
 };
@@ -39,15 +40,33 @@ const textStack = {
   flexDirection: "column",
   justifyContent: "center",
   backgroundColor: "#ED0000",
+  fontFamily: "VG5000, sans-serif",
+  backgroundColor: "transparent",
 
   alignItems: "flex-start",
   overflow: "visible"
 };
-const heartButton = {
+const heartButtonContainer = {
   flex: 1,
   height: 1,
   width: "100%",
-  overflow: "visible"
+  overflow: "visible",
+  backgroundColor: "transparent",
+
+  display: "flex",
+  flexDirection: "row-reverse"
+  // alignItems: "flex-end"
+};
+
+const heartButton = {
+  width: 40,
+  height: 40,
+  overflow: "hidden",
+  opacity: 0.5,
+  // right: "2.5%",
+  backgroundColor: "transparent",
+
+  marginTop: "2.5%%"
 };
 export class Card extends React.Component {
   constructor(props) {
@@ -68,7 +87,7 @@ export class Card extends React.Component {
   render() {
     return (
       <Frame style={cardFrame}>
-        {/* <Stack
+        <Stack
           style={cardPageContainer}
           alignment={"center"}
           key={this.props.index}
@@ -79,9 +98,13 @@ export class Card extends React.Component {
               boxShadow: "0px 5px 5px 0px rgba(0, 0, 0, 0.25)"
             }}
             style={textStack}
-          />
-          <Frame style={heartButton} />
-        </Stack> */}
+          >
+            <h1>ASDFASDF</h1>
+          </Stack>
+          <Frame style={heartButtonContainer}>
+            {/* <Icon icon={3} style={heartButton} /> */}
+          </Frame>
+        </Stack>
       </Frame>
     );
   }

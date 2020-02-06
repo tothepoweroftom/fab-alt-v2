@@ -15,7 +15,8 @@ import {
   appLayout,
   content
 } from "./styles/AppLayout";
-import "./styles/block-styles.css";
+import "./typography.css";
+
 import { useHistory } from "react-router-dom";
 
 export function App() {

@@ -6,7 +6,7 @@ import MuiBottomNavigation from "@material-ui/core/BottomNavigation";
 // tslint:disable-next-line: ban-ts-ignore
 // @ts-ignore
 import MuiBottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import { Icon } from "./Icon";
+import { Icon } from "../Icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
@@ -98,6 +98,7 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
               <BottomNavigationAction
                 value={labels[index]}
                 icon={<Icon icon={index} />}
+                whileTap={{ scale: 0.8 }}
                 classes={{
                   root: classes.iconRoot
                 }}
