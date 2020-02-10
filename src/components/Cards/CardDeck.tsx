@@ -58,6 +58,8 @@ export class CardDeck extends React.Component {
           );
 
           const scaleY = transform(offset, [-1, 0, 1], [0.85, 1, 0.85]);
+          const scaleX = transform(offset, [-1, 0, 1], [1.02, 1, 1.02]);
+
           const borderRadius = transform(offset, [-1, 0, 1], [20, 20, 20]);
           const boxShadow = transform(
             offset,
@@ -70,6 +72,7 @@ export class CardDeck extends React.Component {
             background,
             borderRadius,
             scaleY,
+            scaleX,
             boxShadow
           };
         }}

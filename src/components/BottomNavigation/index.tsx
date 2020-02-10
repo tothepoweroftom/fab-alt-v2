@@ -13,6 +13,9 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import RestoreIcon from "@material-ui/icons/Restore";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createMuiTheme } from "@material-ui/core";
+import { createBrowserHistory } from "history";
+
+const history = createBrowserHistory();
 
 const theme = createMuiTheme({
   props: {
@@ -84,6 +87,7 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
   return (
     <ThemeProvider theme={theme}>
       <MuiBottomNavigation
+        opacity={0}
         value={value}
         onChange={handleChange}
         classes={{

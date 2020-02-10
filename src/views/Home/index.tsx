@@ -4,9 +4,20 @@ import { Frame } from "framer";
 import { home } from "../../styles/AppLayout";
 import { Switch, Route, Link } from "react-router-dom";
 import "../../styles/main.css";
-export const Home = () => (
+export const Home = props => (
   <Frame {...home}>
     <h1>Home</h1>
-    <Link to="/whatif">demo</Link>
+    <ul>
+      <li>
+        <Link to="/setup" onClick={props.handler(0)}>
+          Start New Workshop
+        </Link>
+      </li>
+      <li>
+        <Link to="/whatif" onClick={props.handler(1)}>
+          demo
+        </Link>
+      </li>
+    </ul>
   </Frame>
 );
