@@ -30,19 +30,7 @@ export function App() {
   const [stage, setStage] = React.useState(1);
   const history = useHistory();
   const [showBottomBar, setBottomBar] = React.useState(false);
-  history.listen(location => {
-    //Do your stuff here
-
-    console.log(location.pathname);
-    if (bottomBarNeeded.includes(location.pathname)) {
-      console.log("show bottom bar");
-      setBottomBar(true);
-    } else {
-      setStage(0);
-      console.log("hide bottom bar");
-      setBottomBar(false);
-    }
-  });
+  history.listen(location => {});
   const variants = {
     home: {
       backgroundColor: "#2962FF",
@@ -108,22 +96,24 @@ export function App() {
             <Frame {...content}>
               <WhatIf />
             </Frame>
+            <BottomBar showBottomBar={true} handleChange={handleChange} />
           </Route>
           <Route path="/inventions">
             <Frame {...content}>
               <Inventions />
             </Frame>
+            <BottomBar showBottomBar={true} handleChange={handleChange} />
           </Route>
           <Route path="/favourites">
             <Frame {...content}>
               <Favourites />
             </Frame>
+            <BottomBar showBottomBar={true} handleChange={handleChange} />
           </Route>
           <Route path="/">
             <Home handler={StageHandler} />
           </Route>
         </Switch>
-        <BottomBar showBottomBar={showBottomBar} handleChange={handleChange} />
       </Stack>
     </ThemeProvider>
   );
