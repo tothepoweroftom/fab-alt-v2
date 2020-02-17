@@ -17,7 +17,7 @@ const pageStyle = {
 
   // height: "98%"
 };
-const blue = Color("#00000005");
+const blue = Color("#ffffff25");
 const text = Color("#000000");
 const textNone = Color("#00000000");
 

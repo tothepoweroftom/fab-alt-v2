@@ -21,100 +21,27 @@ import {
 } from "./styles/AppLayout";
 import "./typography.css";
 
+import { createBrowserHistory } from "history";
+
 import { useHistory } from "react-router-dom";
 import { thistle } from "color-name";
 
-const bottomBarNeeded = ["/whatif", "/inventions", "/favourites"];
+import AppContainer from "./AppContainer";
 
 export function App() {
   const [stage, setStage] = React.useState(1);
   const history = useHistory();
   const [showBottomBar, setBottomBar] = React.useState(false);
   history.listen(location => {});
-  const variants = {
-    home: {
-      backgroundColor: "#2962FF",
-      transition: { duration: 1.0 }
-    },
-    first: {
-      backgroundColor: "#FAF455",
-      transition: { duration: 1.0 }
-    },
-    second: { backgroundColor: "#E50000", transition: { duration: 1.0 } },
-    third: { backgroundColor: "#2962FF", transition: { duration: 1.0 } }
-  };
-  const controls = useAnimation();
-
-  const handleChange = (event, newValue) => {
-    if (newValue === 0) {
-      history.push("/whatif");
-
-      controls.start("first");
-    } else if (newValue === 1) {
-      history.push("/inventions");
-      controls.start("second");
-    } else if (newValue === 2) {
-      history.push("/favourites");
-      controls.start("third");
-    }
-  };
 
   function StageHandler(stage) {
     console.log(stage, "stage");
     setStage(stage);
   }
 
-  function BottomBar(props) {
-    if (props.showBottomBar === false) {
-      return null;
-    } else {
-      return (
-        <Frame initial={{ opacity: 0 }} animate={{ opacity: 1 }} {...toolbar}>
-          <BottomNavigationBar handleChange={props.handleChange} value={0} />
-        </Frame>
-      );
-    }
-  }
-
   return (
     <ThemeProvider theme={theme}>
-      <Stack
-        {...appLayout}
-        gap={0}
-        initial="first"
-        animate={controls}
-        variants={variants}
-      >
-        <Frame {...topbar} />
-        <Switch>
-          <Route path="/setup">
-            <Frame {...fullPage}>
-              <Setup />
-            </Frame>
-          </Route>
-          <Route path="/whatif">
-            <Frame {...content}>
-              <WhatIf />
-            </Frame>
-            <BottomBar showBottomBar={true} handleChange={handleChange} />
-          </Route>
-          <Route path="/inventions">
-            <Frame {...content}>
-              <Inventions />
-            </Frame>
-            <BottomBar showBottomBar={true} handleChange={handleChange} />
-          </Route>
-          <Route path="/favourites">
-            <Frame {...content}>
-              <Favourites />
-            </Frame>
-            <BottomBar showBottomBar={true} handleChange={handleChange} />
-          </Route>
-          <Route path="/">
-            <Home handler={StageHandler} />
-          </Route>
-        </Switch>
-      </Stack>
+      <AppContainer />
     </ThemeProvider>
   );
 }

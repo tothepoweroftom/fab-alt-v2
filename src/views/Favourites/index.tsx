@@ -14,14 +14,14 @@ export class Favourites extends React.Component {
   constructor(props) {
     super(props);
     this.stage = this.props.toolpage;
-    console.log("demo", this.stage);
+    // console.log("demo", this.stage);
   }
 
   componentWillMount() {}
   render() {
     return (
       // <Frame style={content}>
-      <CardDeck color={"#fff"} />
+      <CardDeck />
       // </Frame>
     );
   }

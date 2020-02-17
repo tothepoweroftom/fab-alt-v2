@@ -1,65 +1,11 @@
 import * as React from "react";
-import { addPropertyControls, ControlType } from "framer";
-// tslint:disable-next-line: ban-ts-ignore
-// @ts-ignore
-import MuiBottomNavigation from "@material-ui/core/BottomNavigation";
-// tslint:disable-next-line: ban-ts-ignore
-// @ts-ignore
-import MuiBottomNavigationAction from "@material-ui/core/BottomNavigationAction";
+import { Stack, Frame } from "framer";
+
 import { Icon } from "../Icons";
-import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import RestoreIcon from "@material-ui/icons/Restore";
-import { ThemeProvider } from "@material-ui/core/styles";
-import { createMuiTheme } from "@material-ui/core";
 import { createBrowserHistory } from "history";
 
-const history = createBrowserHistory();
-
-const theme = createMuiTheme({
-  props: {
-    // Name of the component ⚛️
-    MuiButtonBase: {
-      // The properties to apply
-      disableRipple: true, // No more ripple, on the whole application 💣!,
-      padding: "0px"
-    }
-  },
-  transitions: {
-    // So we have `transition: none;` everywhere
-    create: () => "none"
-  }
-});
-
-interface Props {
-  showLabels?: boolean;
-  icons?: string[];
-  labels?: string[];
-  width?: number;
-  height?: number;
-  controls?: object;
-}
-const useStyles = makeStyles({
-  root: {
-    background: "transparent",
-    borderRadius: 3,
-    border: 0,
-    color: "white",
-    height: "100%",
-    marginBottom: "20px",
-    padding: "0px !important"
-  },
-  iconRoot: {
-    background: "transparent",
-    borderRadius: 3,
-    border: 0,
-    width: "33%",
-    height: "100%",
-    padding: "0px 0px 10px 0px !important"
-    // margin: "5px"
-  }
-});
+// const history = createBrowserHistory();
 
 const defaultProps: Props = {
   showLabels: false,
@@ -68,10 +14,31 @@ const defaultProps: Props = {
   width: 500,
   height: "11%"
 };
+const stackLayout = {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  alignContent: "flex-end",
+  overflow: "hidden",
+  backgroundColor: "transparent"
+};
+
+const buttonFrame = {
+  flex: 1,
+  top: "25%",
+  // padding: "0px 40px",
+  padding: "0px !important",
+  width: "1fr",
+  height: "100%",
+  overflow: "hidden",
+  backgroundColor: "transparent"
+};
 
 export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
   const { labels, routes, ...other } = props;
-  const classes = useStyles();
 
   // tslint:disable-next-line: ban-ts-ignore
   // @ts-ignore
@@ -80,57 +47,45 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
   const items = routes.length > labels.length ? icons : labels;
   const handleChange = (event, newValue) => {
     setValue(newValue);
-
-    console.log(newValue);
-    props.handleChange(event, newValue);
+    props.handleChange(newValue);
   };
   return (
-    <ThemeProvider theme={theme}>
-      <MuiBottomNavigation
-        opacity={0}
-        value={value}
-        onChange={handleChange}
-        classes={{
-          root: classes.root, // class name, e.g. `classes-nesting-root-x`
-          label: classes.label // class name, e.g. `classes-nesting-label-x`
+    <Stack style={stackLayout}>
+      <Frame
+        style={buttonFrame}
+        whileTap={{ scale: 0.8 }}
+        onClick={() => {
+          handleChange({}, 0);
         }}
-        {...other}
       >
-        {items.map(
-          (item, index) =>
-            (labels[index] !== undefined || icons[index] !== undefined) && (
-              <BottomNavigationAction
-                value={labels[index]}
-                icon={<Icon icon={index} />}
-                whileTap={{ scale: 0.8 }}
-                classes={{
-                  root: classes.iconRoot
-                }}
-              >
-                <Link to={routes[index]}>{/* <h1>lalal</h1> */}a</Link>
-              </BottomNavigationAction>
-            )
-        )}
-      </MuiBottomNavigation>
-    </ThemeProvider>
+        <Link to="/whatif">
+          <Icon icon={0} />
+        </Link>
+      </Frame>
+      <Frame
+        style={buttonFrame}
+        whileTap={{ scale: 0.8 }}
+        onClick={() => {
+          handleChange({}, 1);
+        }}
+      >
+        <Link to="/inventions">
+          <Icon icon={1} />
+        </Link>
+      </Frame>
+      <Frame
+        style={buttonFrame}
+        whileTap={{ scale: 0.8 }}
+        onClick={() => {
+          handleChange({}, 2);
+        }}
+      >
+        <Link to="/favourites">
+          <Icon icon={2} />
+        </Link>
+      </Frame>
+    </Stack>
   );
 };
 
 BottomNavigationBar.defaultProps = defaultProps;
-
-addPropertyControls(BottomNavigationBar, {
-  showLabels: {
-    type: ControlType.Boolean,
-    title: "Show labels"
-  },
-  icons: {
-    type: ControlType.Array,
-    title: "Icons",
-    propertyControl: { type: ControlType.String }
-  },
-  labels: {
-    type: ControlType.Array,
-    title: "Labels",
-    propertyControl: { type: ControlType.String }
-  }
-});
