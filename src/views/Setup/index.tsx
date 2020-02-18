@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import { HelpCarousel } from "./HelpCarousel";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import axios from "axios";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,7 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   })
 );
-
 const hello = {
   width: "100vw",
   height: "100%",
@@ -157,6 +157,24 @@ const Dot = {
   borderRadius: "50%"
 };
 
+const isValidUrl = string => {
+  if (string.length < 1) {
+    return ["", true];
+  }
+  var n = string.search(".pdf");
+
+  if (n >= 0) {
+    return ["Cannot accept pdf files", false];
+  }
+
+  try {
+    new URL(string);
+    return ["", true];
+  } catch (_) {
+    return ["Not a valid url", false];
+  }
+};
+
 function PageIndicator(props) {
   const [stage, setStage] = React.useState(0);
   function handleClick(val) {
@@ -200,48 +218,12 @@ function PageIndicator(props) {
   );
 }
 
-function Hello(props) {
-  const moveToPage = page => {
-    props.handler("", page);
-  };
-  return (
-    <Frame style={hello} background={"#255cf2"}>
-      <Stack style={flexContainer}>
-        <Frame style={animFrame}>
-          <LottieAnim />
-        </Frame>
-        <Stack style={textBox}>
-          <Frame style={text}>
-            <span style={{ fontSize: 36 }}>Hi there,</span>
-            <br />I am an AI that helps you to co-create futures in a large
-            group.
-            <br />
-            <br />I multiply your ideas by remixing the concepts that you and
-            your team are working with.
-          </Frame>
-        </Stack>
-        <Stack style={btnFrameCenter}>
-          <Button
-            color="secondary"
-            variant="contained"
-            size="small"
-            style={btnStyle}
-            onClick={() => {
-              props.handler("", 1);
-            }}
-          >
-            Let's Go
-          </Button>
-        </Stack>
-      </Stack>
-    </Frame>
-  );
-}
 function Page1(props) {
   const [projectTitle, setProjectTitle] = React.useState("");
   const handleChange = (event, value) => {
     console.log(event.target.value);
     setProjectTitle(event.target.value);
+    props.setTitle(event.target.value);
   };
   const moveToPage = val => {
     props.handler("", val);
@@ -298,6 +280,7 @@ function Page2(props) {
   const handleChange = (event, value) => {
     console.log(event.target.value);
     setProjectDescription(event.target.value);
+    props.setProblem(event.target.value);
   };
   const moveToPage = val => {
     props.handler("", val);
@@ -352,21 +335,45 @@ function Page2(props) {
   );
 }
 function Page3(props) {
-  const [projectLinks, setProjectLinks] = React.useState(["", "", ""]);
+  const [url1, setUrl1] = React.useState("");
+  const [url2, setUrl2] = React.useState("");
+  const [url3, setUrl3] = React.useState("");
+
   const handleChange = (event, value) => {
     console.log(event.target.value);
     setProjectLinks(event.target.value);
+    // props.setUrls(event.t)
   };
 
-  const submitLinks = () => {
-    props.handler(projectLinks, 4);
+  const setURL = (idx, value) => {
+    if (idx === 0) {
+      setUrl1(value);
+    } else if (idx === 1) {
+      setUrl2(value);
+    } else if (idx === 2) {
+      setUrl3(value);
+    }
+
+    props.setUrls([url1, url2, url3]);
   };
+
+  const submitNewWorkshop = () => {
+    setUrl1(document.getElementById("url-field-1").value);
+    setUrl2(document.getElementById("url-field-2").value);
+    setUrl3(document.getElementById("url-field-3").value);
+
+    if (isValidUrl(url1)[1]) {
+      props.setUrls([url1, url2, url3]);
+      props.handleSubmit([url1, url2, url3]);
+    }
+  };
+
   const moveToPage = val => {
     // console.log(val);
     props.handler("", val);
   };
   return (
-    <Frame style={hello} background={"#ff5131"}>
+    <Frame style={hello} background={"#255cf2"}>
       <Stack style={flexContainer}>
         {/* <Frame style={topNav} /> */}
         <Frame style={animFrameSmall}>
@@ -382,9 +389,15 @@ function Page3(props) {
               <TextField
                 style={textField}
                 required
-                id="standard-error-helper-text"
+                error={!isValidUrl(url1)[1]}
+                onChange={(event, value) => {
+                  setURL(0, event.target.value);
+                }}
+                id="url-field-1"
                 label=""
-                helperText="Link 1"
+                helperText={
+                  isValidUrl(url1)[1] ? "Link 1" : isValidUrl(url1)[0]
+                }
                 placeholder="Ex. Wikipedia page."
               />
             </div>
@@ -392,9 +405,15 @@ function Page3(props) {
               <TextField
                 style={textField}
                 required
-                id="standard-error-helper-text"
+                error={!isValidUrl(url2)[1]}
+                onChange={(event, value) => {
+                  setURL(1, event.target.value);
+                }}
+                id="url-field-2"
                 label=""
-                helperText="Link 2"
+                helperText={
+                  isValidUrl(url2)[1] ? "Link 2" : isValidUrl(url2)[0]
+                }
                 placeholder="Ex. News article."
               />
             </div>
@@ -402,9 +421,15 @@ function Page3(props) {
               <TextField
                 style={textField}
                 required
-                id="standard-error-helper-text"
-                label=""
-                helperText="Link 3"
+                error={!isValidUrl(url3)[1]}
+                onChange={(event, value) => {
+                  setURL(2, event.target.value);
+                }}
+                id="url-field-3"
+                value={url3}
+                helperText={
+                  isValidUrl(url3)[1] ? "Link 3" : isValidUrl(url3)[0]
+                }
                 placeholder="Ex. Blog post."
               />
             </div>
@@ -416,7 +441,7 @@ function Page3(props) {
             variant="contained"
             color="secondary"
             size="small"
-            onClick={submitLinks}
+            onClick={submitNewWorkshop}
           >
             Generate
           </Button>
@@ -460,27 +485,45 @@ function Page4(props) {
 }
 
 export function Setup() {
-  const [stage, setStage] = React.useState(0);
+  const [stage, setStage] = React.useState(1);
+
+  // User details
+  const [title, setTitle] = React.useState("");
+  const [problem, setProblem] = React.useState("");
+  const [urls, setUrls] = React.useState([]);
+
   function changeStage(value) {
     console.log(value);
     setStage(value);
   }
 
-  if (stage === 0) {
-    return (
-      <Hello
-        handler={(value, page) => {
-          console.log(value, page);
-          setStage(page);
-        }}
-      />
-    );
-  } else if (stage === 1) {
+  function postToFirebase(_urls) {
+    const workshop = {
+      title: title,
+      problem: problem,
+      url1: _urls[0],
+      url2: _urls[1],
+      url3: _urls[2]
+    };
+
+    console.log("axios workshop", workshop);
+    // setStage(4);
+    axios.post("http://34.90.197.81:8080/", { workshop }).then(res => {
+      console.log(res);
+      console.log(res.data);
+      alert("success");
+    });
+  }
+
+  if (stage === 1) {
     return (
       <Page1
         handler={(value, page) => {
           console.log(value, page);
           setStage(page);
+        }}
+        setTitle={title => {
+          setTitle(title);
         }}
       />
     );
@@ -491,6 +534,10 @@ export function Setup() {
           console.log(value, page);
           setStage(page);
         }}
+        setProblem={problem => {
+          setProblem(problem);
+          console.log(problem, "upperlevel");
+        }}
       />
     );
   } else if (stage === 3) {
@@ -499,6 +546,13 @@ export function Setup() {
         handler={(value, page) => {
           console.log(value, page);
           setStage(page);
+        }}
+        setUrls={urls => {
+          setUrls(urls);
+          console.log(urls, "upper");
+        }}
+        handleSubmit={urls => {
+          postToFirebase(urls);
         }}
       />
     );

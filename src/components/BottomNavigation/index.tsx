@@ -55,7 +55,7 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
         style={buttonFrame}
         whileTap={{ scale: 0.8 }}
         onClick={() => {
-          handleChange({}, 0);
+          handleChange({}, 1);
         }}
       >
         <Link to="/whatif">
@@ -66,7 +66,7 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
         style={buttonFrame}
         whileTap={{ scale: 0.8 }}
         onClick={() => {
-          handleChange({}, 1);
+          handleChange({}, 2);
         }}
       >
         <Link to="/inventions">
@@ -77,7 +77,7 @@ export const BottomNavigationBar: React.SFC<Props> = (props: Props) => {
         style={buttonFrame}
         whileTap={{ scale: 0.8 }}
         onClick={() => {
-          handleChange({}, 2);
+          handleChange({}, 3);
         }}
       >
         <Link to="/favourites">

@@ -5,11 +5,10 @@ import { BottomNavigationBar } from "../src/components/BottomNavigation";
 import { WhatIf } from "./views/WhatIf/index.tsx";
 import { Favourites } from "./views/Favourites/index.tsx";
 import { Setup } from "./views/Setup/index.tsx";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { theme } from "./styles/MuiTheme";
+
 import { Inventions } from "./views/Inventions/index.tsx";
 import { Home } from "./views/Home/index.tsx";
-import { HashRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import {
   topbar,
   toolbar,
@@ -24,18 +23,93 @@ import { createBrowserHistory } from "history";
 import { useHistory } from "react-router-dom";
 import { thistle } from "color-name";
 import { withRouter } from "react-router-dom";
+import firebase from "./services/firebase";
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.stage = 0;
+    this.state = {
+      selectedWorkshop: "ewys"
+    };
+
+    this.ref = firebase
+      .firestore()
+      .collection("workshops")
+      .doc(this.state.selectedWorkshop);
+  }
+
+  componentDidMount() {
+    this.ref.get().then(doc => {
+      if (doc.exists) {
+        const workshop = doc.data();
+
+        this.setState({
+          workshop: doc.data(),
+          key: doc.id,
+          isLoading: false
+        });
+      } else {
+        console.log("No such document!");
+        alert("Sorry no such workshop exists");
+      }
+      console.log(this.state);
+    });
+  }
+
+  onCollectionUpdate = querySnapshot => {
+    // const workshops = [];
+    // querySnapshot.forEach(doc => {
+    //   const { id, inventions, whatifs, problem, title, words } = doc.data();
+    //     workshops.push({
+    //       key: doc.id,
+    //       doc, // DocumentSnapshot
+    //       id,
+    //       inventions,
+    //       whatifs,
+    //       title,
+    //       words
+    //     });
+    // });
+    // this.setState({
+    //   workshops
+    // });
+  };
   componentWillMount() {
-    this.unlisten = this.props.history.listen((location, action) => {});
+    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+
+    this.unlisten = this.props.history.listen((location, action) => {
+      console.log(location);
+      this.checkLocation(location);
+    });
+    console.log(this.props.location);
+    this.checkLocation(this.props.location);
+    console.log(this.stage);
   }
   componentWillUnmount() {
     this.unlisten();
   }
+
+  checkLocation(location) {
+    switch (location.pathname) {
+      case "/whatif":
+        this.stage = 1;
+        break;
+      case "/inventions":
+        this.stage = 2;
+        break;
+      case "/favourites":
+        this.stage = 3;
+        break;
+      default:
+        this.stage = 0;
+        break;
+    }
+  }
   render() {
     return (
       <div>
-        <BodyStack />
+        <BodyStack stage={this.stage} />
       </div>
     );
   }
@@ -47,7 +121,7 @@ function BottomBar(props) {
     return null;
   } else {
     return (
-      <Frame initial={{ opacity: 0 }} animate={{ opacity: 1 }} {...toolbar}>
+      <Frame {...toolbar}>
         <BottomNavigationBar handleChange={props.handleChange} value={0} />
       </Frame>
     );
@@ -55,6 +129,11 @@ function BottomBar(props) {
 }
 
 function BodyStack(props) {
+  React.useEffect(() => {
+    // handleChange(props.stage);
+    console.log("Body Stack", props.stage);
+  });
+
   const variants = {
     home: {
       backgroundColor: "#0039CB",
@@ -73,11 +152,14 @@ function BodyStack(props) {
     if (newValue === 0) {
       // history.push("/whatif");
 
-      controls.start("first");
+      controls.start("home");
     } else if (newValue === 1) {
       // history.push("/inventions");
-      controls.start("second");
+      controls.start("first");
     } else if (newValue === 2) {
+      // history.push("/favourites");
+      controls.start("second");
+    } else if (newValue === 3) {
       // history.push("/favourites");
       controls.start("third");
     }
@@ -86,11 +168,10 @@ function BodyStack(props) {
     <Stack
       {...appLayout}
       gap={0}
-      initial="second"
+      initial="home"
       animate={controls}
       variants={variants}
     >
-      <Frame {...topbar} />
       <Switch>
         <Route path="/setup">
           <Frame {...fullPage}>
@@ -98,18 +179,24 @@ function BodyStack(props) {
           </Frame>
         </Route>
         <Route path="/whatif">
+          <Frame {...topbar} />
+
           <Frame {...content}>
             <WhatIf />
           </Frame>
           <BottomBar showBottomBar={true} handleChange={handleChange} />
         </Route>
         <Route path="/inventions">
+          <Frame {...topbar} />
+
           <Frame {...content}>
             <Inventions />
           </Frame>
           <BottomBar showBottomBar={true} handleChange={handleChange} />
         </Route>
         <Route path="/favourites">
+          <Frame {...topbar} />
+
           <Frame {...content}>
             <Favourites />
           </Frame>
